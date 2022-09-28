@@ -1,9 +1,44 @@
+from random import choices
 import site
+from tabnanny import verbose
 from django.db import models
+from django.contrib.auth import User
 
 class Categoria(models.Model):
     descricao = models.CharField(max_length=255)
+    def __str__(self):
+        return self.descricao
 
-class editora(models.Model):
+class Editora(models.Model):
     descricao = models.CharField(max_length=255)
     site = models.URLField()
+    def __str__(self):
+        return self.nome
+
+class Autor(models.Model):
+    class Meta:
+        verbose_name_plural = "Autores"
+    nome = models.CharField(max_length=255)
+
+    nome=models.CharField(max_length=255)
+    def __str__(self):
+        return self.nome
+    
+class Livro(models.Model):
+    titulo =models.CharField(max_length=255)
+    ISBN = models.CharField(max_length=32)
+    quantidade = models.IntegerField()
+    preco = models.FloatField()
+    categoria = models.ForeignKey(Categoria, on_delete=models.PROTECT, related_name= "livros")
+    editora = models.ForeignKey(Editora, on_delete=models.PROTECT, related_name= "livros")
+    autores= models.ManyToManyField(Autor, related_name="livros")
+
+    def __str__(self):
+        return "%s (%s)"%(self.titulo, self.editora)
+
+class Compra(models.Model):
+
+    class StatusCompra(models.IntegerChoices)
+
+    usuario = models.ForeignKey(User, on_delete=models.PROTECT,related_name = "compras")
+    status = models.IntegerField(choices=)
