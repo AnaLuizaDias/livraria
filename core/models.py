@@ -1,44 +1,99 @@
-from random import choices
-import site
-from tabnanny import verbose
+# from django.db import models
+# from django.contrib.auth.models import User
+
+# class Categoria(models.Model):
+#     descricao = models.CharField(max_length=255)
+#     def __str__(self):
+#         return self.descricao
+
+# class Editora(models.Model):
+#     nome = models.CharField(max_length=255)
+#     site = models.URLField()
+#     def __str__(self):
+#         return self.nome
+
+# class Autor(models.Model):
+#     class Meta:
+#         verbose_name_plural = "Autores"
+#     nome = models.CharField(max_length=255)
+
+#     nome=models.CharField(max_length=255)
+#     def __str__(self):
+#         return self.nome
+    
+# class Livro(models.Model):
+#     titulo =models.CharField(max_length=255)
+#     ISBN = models.CharField(max_length=32)
+#     quantidade = models.IntegerField()
+#     preco = models.FloatField()
+#     categoria = models.ForeignKey(Categoria, on_delete=models.PROTECT, related_name= "livros")
+#     editora = models.ForeignKey(Editora, on_delete=models.PROTECT, related_name= "livros")
+#     autores= models.ManyToManyField(Autor, related_name="livros")
+
+#     def __str__(self):
+#         return "%s (%s)"%(self.titulo, self.editora)
+
+# class Compra(models.Model):
+#     class StatusCompra(models.IntegerChoices):
+#         CARRINHO = 1, 'carrinho'
+#         REALIZADO = 2, 'realizado'
+#         PAGO = 3, 'pago'
+#         ENTREGUE = 4, 'Entregue'
+
+#     usuario = models.ForeignKey(User, on_delete=models.PROTECT,related_name = "compras")
+#     status = models.IntegerField(choices=StatusCompra.choices, default = StatusCompra.CARRINHO)
+
+from pyexpat import model
 from django.db import models
-from django.contrib.auth import User
+from django.contrib.auth.models import User
 
 class Categoria(models.Model):
     descricao = models.CharField(max_length=255)
+
     def __str__(self):
         return self.descricao
 
 class Editora(models.Model):
-    descricao = models.CharField(max_length=255)
+    nome = models.CharField(max_length=255)
     site = models.URLField()
+
     def __str__(self):
         return self.nome
 
 class Autor(models.Model):
     class Meta:
-        verbose_name_plural = "Autores"
+        verbose_name_plural = "autores"
+
     nome = models.CharField(max_length=255)
 
-    nome=models.CharField(max_length=255)
     def __str__(self):
         return self.nome
-    
+
 class Livro(models.Model):
-    titulo =models.CharField(max_length=255)
+    titulo = models.CharField(max_length=255)
     ISBN = models.CharField(max_length=32)
     quantidade = models.IntegerField()
     preco = models.FloatField()
-    categoria = models.ForeignKey(Categoria, on_delete=models.PROTECT, related_name= "livros")
-    editora = models.ForeignKey(Editora, on_delete=models.PROTECT, related_name= "livros")
-    autores= models.ManyToManyField(Autor, related_name="livros")
+    categoria = models.ForeignKey(Categoria, on_delete=models.PROTECT, related_name="livros")
+    editora = models.ForeignKey(Editora, on_delete=models.PROTECT, related_name="livros")
+    autores = models.ManyToManyField(Autor, related_name="livros")
 
     def __str__(self):
-        return "%s (%s)"%(self.titulo, self.editora)
+        return "%s (%s)" %(self.titulo, self.editora)
 
 class Compra(models.Model):
 
-    class StatusCompra(models.IntegerChoices)
+    class StatusCompra(models.IntegerChoices):
+        CARRINHO = 1, 'Carrinho'
+        REALIZADO = 2, 'Realizado'
+        PAGO = 3, 'Pago'
+        ENTREGUE = 4, 'Entregue'
 
-    usuario = models.ForeignKey(User, on_delete=models.PROTECT,related_name = "compras")
-    status = models.IntegerField(choices=)
+
+    usuario = models.ForeignKey(User, on_delete=models.PROTECT, related_name="compras")
+    status = models.IntegerField(choices=StatusCompra.choices, default=StatusCompra.CARRINHO)
+
+class ItensCompra(models.Model):
+    Compra = models.ForeignKey(Compra, on_delete=models.CASCADE, related_name = "itens")
+    livros= models.ForeignKey(Livro, on_delete=models.PROTECT, related_name = "+")
+    quantidade= models.IntegerField()
