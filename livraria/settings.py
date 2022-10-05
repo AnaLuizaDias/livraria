@@ -14,7 +14,7 @@ SECRET_KEY = 'django-insecure-mk6+_cjsw*19dcq8_!++umr_hsv^dc-%%4*3h(12hhh_#_f!ac
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["localhost","https://curso-livraria-django.herokuapp.com", "127.0.0.1"]
 
 
 # Application definition
